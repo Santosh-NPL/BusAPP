@@ -5,7 +5,6 @@ const  passengerPayment = new Schema(
         method:{
             type: String,
             enum: ['Khalti', 'Esewa', 'Bank', 'cash', 'other'],
-            required: null,
         },
         user_id:{
             type:Schema.Type.ObjectId,

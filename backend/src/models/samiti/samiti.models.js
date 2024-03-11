@@ -12,7 +12,7 @@ const samitiSchema = new Schema({
     },
     address:{
         type: String,
-        required:null,
+       
         trim: true,
     },
     mobile:{

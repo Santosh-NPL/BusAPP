@@ -13,7 +13,6 @@ const  profileModels = new mongoose.Schema(
         },
         image: {
             type:String,
-            required:null,
         },
         user_id:{
             type: mongoose.Schema.Type.ObjectId,

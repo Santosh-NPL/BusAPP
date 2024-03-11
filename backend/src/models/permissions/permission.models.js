@@ -8,11 +8,9 @@ const permissionModels = new mongoose.Schema(
         },
         display_name: {
             type: String,
-            reqired: null,
         },
         description: {
             type: String,
-            reqired: null,
         }
     }, {
         timestamps:true

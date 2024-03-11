@@ -4,7 +4,6 @@ const  currency = new Schema(
     {
         name:{
             type: String,
-            required: null,
         },
         slug:{
             type:String,
