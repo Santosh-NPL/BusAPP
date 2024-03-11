@@ -15,11 +15,11 @@ const  vehicleRoutes = new Schema(
             ref: "City"
         },
         departure_day:{
-            type: Day,
+            type: String,
             required: true
         },
         destination_day:{
-            type: Day,
+            type: String,
             required: true
         },
         departure_time:{
@@ -27,7 +27,7 @@ const  vehicleRoutes = new Schema(
             required: true
         },
         destination_time:{
-            type: Time,
+            type: String,
             required: true
         },
         departure_address:{
@@ -43,7 +43,7 @@ const  vehicleRoutes = new Schema(
             ref: "Currency"
         },
         ticket_price:{
-            type: Double(10, 2),
+            type: Decimal128,
             required: true,
         }
         

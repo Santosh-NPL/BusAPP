@@ -17,7 +17,7 @@ const  passengerPayment = new Schema(
         },
        
         total_amount:{
-            type: Double(10, 2),
+            type: Decimal128,
             required: true,
         }
 
