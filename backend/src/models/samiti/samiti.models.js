@@ -20,6 +20,10 @@ const samitiSchema = new Schema({
         required: true,
         max: 10,
         min:10,
+    },
+    cover_image:{
+        type: String,
+        required:true
     }
 }, {timestamps: true});
 

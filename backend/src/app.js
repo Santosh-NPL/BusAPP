@@ -6,35 +6,25 @@ const app = express();
 
 app.use(
     cors({
-    origin: process.env.CORS_ORIGIN,
-    credentials: true,
-})
-);
+        origin: process.env.CORS_ORIGIN,
+        credentials: true,
+    }));
 
-app.use(
-    express.json({
-    limit: process.env.LIMIT
-}));
-app.use(express.urlencoded({
-    extended: true,
-    limit: process.env.LIMIT
-}));
+// Set up body parsers with limit from environment variable
+const limit = process.env.LIMIT || '16kb'; // Default to 16KB if LIMIT is not set
+app.use(express.json({ limit }));
+app.use(express.urlencoded({ extended: true, limit }));
 
 app.use(express.static("public"));
 
 app.use(cookieParser());
 
-//routes import
-
+// Routes import
 import userRouter from './routes/user.routes.js';
+import samitiRouter from './routes/samiti.routes.js';
 
-
-
-//route declaration
-
+// Route declaration
 app.use("/api/v1/users", userRouter);
-
-
-
+app.use("/api/v1/samiti", samitiRouter);
 
 export { app };

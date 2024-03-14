@@ -5,9 +5,26 @@ import {Profile} from "../models/users/Profile.models.js";
 import {uploadOnCloudinary} from "../utils/cloudinary.file.upload.js";
 import {ApiResponse} from "../utils/ApiResponse.js";
 
+
+const generateAccessAndRefreshToken = async (userId) => {
+
+    try{
+        const user = await User.findById(userId);
+
+       const accessToken =  user.generateAccessToken();
+       const refreshToken = user.generateRefreshToken();
+       user.refreshToken = refreshToken
+        await user.save({validateBeforeSave: false});
+
+       return {accessToken, refreshToken}
+
+    }catch (e) {
+        throw new ApiError("Somethings is wrong tocreate the token")
+    }
+
+}
 const registerUser = asyncHandler( async (req, res) => {
 
-    console.log(req);
     // get user details from frontend
     // validation - not empty
     // check if user already exists: mobile
@@ -22,9 +39,9 @@ const registerUser = asyncHandler( async (req, res) => {
     const {mobile, name, password, avatar, gender} = req.body;
     
 
-        if(mobile == ""){
-            throw new ApiError(400, "Mobile Number Required");
-        }
+        // if(mobile == ""){
+        //     throw new ApiError(400, "Mobile Number Required");
+        // }
 
     // or
 
@@ -96,6 +113,81 @@ const registerUser = asyncHandler( async (req, res) => {
 //    res.status(200).json({
 //        message: "ok"
 //    })
+});
+
+const loginUser = asyncHandler(async (req, res) => {
+
+    // req body -> data
+    // username or email or mobile
+    // find the user
+    //password check
+        //access and refresh token
+    // send cookies secure
+
+    // res send
+
+
+    const {mobile, email, username, password} = req.body;
+
+
+    if (!mobile) {
+        throw new ApiError(400, "Mobile, email, or username is required");
+    }
+
+    const  user = await User.findOne({
+        $or: [{mobile}, {email}, {username}]
+    });
+
+    if(!user){
+        throw new ApiError(400, "User not found");
+    }
+
+    const isPasswordValid = await user.isPasswordCorrect(password)
+
+    if(!isPasswordValid){
+        throw new ApiError(400, "Password is not correct");
+    }
+
+    const {accessToken, refreshToken} = await generateAccessAndRefreshToken(user._id);
+    const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
+
+    const options = {
+        httpOnly: true,
+        secure: true
+    }
+
+    return res
+        .status(200)
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", refreshToken, options).
+        json(
+            new ApiResponse(200, {
+                user: loggedInUser, accessToken, refreshToken
+            }, "User logged In successfully")
+        )
+
+});
+
+const logoutUser = asyncHandler(async (req, res) => {
+  await  User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set: {
+                refresh_token: undefined
+            }
+        },{
+            req: true
+        }
+    )
+    const options = {
+        httpOnly: true,
+        secure: true
+    }
+    return res
+        .status(200)
+        .clearCookie("accessToken", options)
+        .clearCookie("refreshToken", options)
+        .json(new ApiResponse(200, {}, "user Logout"))
 })
 
-export {registerUser};
+export {registerUser, loginUser, logoutUser};
