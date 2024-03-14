@@ -1,9 +1,9 @@
-import mongoose from "mongoose";
+import mongoose, {Schema} from "mongoose";
 
-const  profileModels = new mongoose.Schema(
+const  profileModels = new Schema(
     {
         mobile:{
-            type: Number,
+            type: String,
             required: null,
         },
         gender:{
@@ -11,11 +11,11 @@ const  profileModels = new mongoose.Schema(
             enum:['M', 'F', 'O'],
             required: true,
         },
-        image: {
+        avatar: {
             type:String,
         },
         user_id:{
-            type: mongoose.Schema.Type.ObjectId,
+            type: Schema.Types.ObjectId,
             ref:'User',
         }
     }, { timestamps:true }

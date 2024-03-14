@@ -2,14 +2,13 @@ import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-const userSchema: Schema = new mongoose.Schema(
+const userSchema = new mongoose.Schema(
     {
         mobile: {
-            type: Number,
+            type: String,
             required: true,
             unique: true,
-            max: 10,
-            min: 10,
+
         },
         name: {
             type: String,
@@ -38,7 +37,7 @@ const userSchema: Schema = new mongoose.Schema(
 
 userSchema.pre("save", async function(next){
     if(!this.isModified("password")) return next();
-    this.password = bcrypt.hash(this.password, 10)
+    this.password = await bcrypt.hash(this.password, 10)
     next();
 });
 
@@ -50,9 +49,8 @@ userSchema.methods.generateAccessToken = function(){
     return jwt.sign(
         {
             _id: this._id,
-            email: this.email,
-            username: this.username,
-            fullName: this.fullName
+            mobile: this.mobile,
+            name: this.name
         },
         process.env.ACCESS_TOKEN_SECRET,
         {
