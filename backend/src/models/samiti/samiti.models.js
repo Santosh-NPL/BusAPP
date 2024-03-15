@@ -18,8 +18,6 @@ const samitiSchema = new Schema({
     mobile:{
         type: Number,
         required: true,
-        max: 10,
-        min:10,
     },
     cover_image:{
         type: String,

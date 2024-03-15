@@ -3,11 +3,11 @@ import mongoose from "mongoose";
 const role_usersModel = new mongoose.Schema(
     {
         role_id:{
-            type: mongoose.Schema.Type.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'Role'
         },
         user_id:{
-            type: mongoose.Schema.Type.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
         }
     }
