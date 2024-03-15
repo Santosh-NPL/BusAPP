@@ -25,7 +25,7 @@ const generateAccessAndRefreshToken = async (userId) => {
         throw new ApiError("Somethings is wrong tocreate the token")
     }
 
-}
+};
 const registerUser = asyncHandler( async (req, res) => {
 
     // get user details from frontend
